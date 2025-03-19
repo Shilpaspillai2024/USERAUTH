@@ -1,20 +1,46 @@
-import { Schema,model} from "mongoose";
+import { Schema, model } from "mongoose";
 import { IUser } from "../interface/User";
 
-const UserSchema =new Schema<IUser>({
-    email:{
-        type:String,
-        required:true,
-        unique:true,
+const UserSchema = new Schema<IUser>(
+  {
+    email: {
+      type: String,
+      required: true,
+      unique: true,
     },
-    password:{
-        type:String,
-        required:true,
+    password: {
+      type: String,
+      required: true,
     },
-    createdAt:{
-        type:Date,
-        default:Date.now
+    kycVerified: {
+      type: Boolean,
+      default: false,
+    },
+    kycType: {
+      type: String,
+      enum: ["video", "image", null],
+      default: null,
+    },
+    kycDate: {
+      type: Date,
+      default: null,
+    },
+    kycUrl:{
+        type:String,
+        default:null
+    },
+    kycPublicId:{
+      type:String,
     }
-});
 
-export default model<IUser>('User',UserSchema);
+  },
+  {
+    timestamps: true,
+    // createdAt:{
+    //     type:Date,
+    //     default:Date.now
+    // }
+  }
+);
+
+export default model<IUser>("User", UserSchema);
