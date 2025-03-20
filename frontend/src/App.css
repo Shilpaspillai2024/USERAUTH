@@ -235,7 +235,7 @@
   cursor: not-allowed;
 }
 
-/* KYC Details Page */
+
 .kyc-details-container {
   width: 100vw;
   margin: 0 auto;
@@ -298,12 +298,49 @@
   margin-top: 20px;
 }
 
-.approve-button,
-.reject-button {
-  padding: 8px 15px;
-  border: none;
-  border-radius: 4px;
+input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border 0.3s ease;
+  box-sizing: border-box;
+
+  &:focus {
+    border-color: #007bff;
+    outline: none;
+  }
+}
+.password-input-container {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+
+.password-input-container input {
+  flex: 1;
+ 
+}
+
+.password-toggle-icon {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
-  font-weight: 500;
+  color: #555;
+}
+
+
+
+.input-error {
+  border: 1px solid #ff3333;
+}
+
+.field-error {
+  color: #ff3333;
+  font-size: 0.8rem;
+  margin-top: 5px;
 }
 
