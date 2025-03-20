@@ -61,7 +61,7 @@ const KYC: React.FC<KYCProps> = ({ onSubmit }) => {
     };
 
     mediaRecorder.onstop = () => {
-      const blob = new Blob(chunksRef.current, { type: "vieo/webm" });
+      const blob = new Blob(chunksRef.current, { type: "video/webm" });
       setVideoBlob(blob);
     };
 

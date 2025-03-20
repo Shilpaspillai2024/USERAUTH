@@ -5,16 +5,15 @@ import {
   Route,
   Navigate,
   Link,
- 
- 
 } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Register from "./components/auth/Register";
 import Login from "./components/auth/Login";
 import Dashboard from "./components/dashboard/Dashboard";
 import KYC from "./components/kyc/KYC";
-import axios from "axios";
 import "./App.css";
+import { getUserData, uploadKYC } from "./api/api";
+import { ToastContainer,toast } from "react-toastify";
 
 interface KYCFiles {
   video?: Blob;
@@ -23,7 +22,7 @@ interface KYCFiles {
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
+
   const checkAuth = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -32,11 +31,7 @@ function App() {
     }
 
     try {
-      await axios.get(`${import.meta.env.VITE_API_URL}/api/users/me`, {
-        headers: {
-          "x-auth-token": token,
-        },
-      });
+      await getUserData(token);
       setIsAuthenticated(true);
     } catch (err) {
       console.error("Auth check failed:", err);
@@ -56,50 +51,24 @@ function App() {
 
   const handleKYCSubmit = async (files: KYCFiles) => {
     try {
-      const formData = new FormData();
       const token = localStorage.getItem("token");
 
       if (!token) {
         throw new Error("No authentication token found");
       }
 
-      const cloudName = "dkltkryj8";
-      const uploadPreset = "kyc_upload";
-      const cloudinaryUrl = `https://api.cloudinary.com/v1_1/${cloudName}/upload`;
+      const result = await uploadKYC(files, token);
 
-      if (files.video) {
-        formData.append("file", files.video, "kyc-video.webm");
-
-        formData.append("upload_preset", uploadPreset);
-        formData.append("resource_type", "video");
-      } else if (files.image) {
-        formData.append("file", files.image, "kyc-image.jpg");
-        formData.append("upload_preset", uploadPreset);
-        formData.append("resource_type", "image");
+      if (result) {
+        toast.success("KYC updated successfully")
+        await checkAuth();
+        window.location.href = "/dashboard";
+        return true;
       }
-
-      const cloudinaryResponse = await axios.post(cloudinaryUrl, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
-
-      const { secure_url, public_id, resource_type } = cloudinaryResponse.data;
-
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/users/upload-kyc`,
-        {
-          kycUrl: secure_url,
-          kycPublicId: public_id,
-          kycType: resource_type === "video" ? "video" : "image",
-        },
-        { headers: { "x-auth-token": token } }
-      );
-
-      await checkAuth();
-      window.location.href = "/dashboard";
-      return true;
+      return false;
     } catch (err) {
       console.error("Error uploading KYC:", err);
-      alert("Failed to upload KYC. Please try again.");
+      toast.error("Failed to upload KYC. Please try again.");
       return false;
     }
   };
@@ -158,6 +127,19 @@ function App() {
             }
           />
         </Routes>
+
+
+        <ToastContainer 
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
       </div>
     </Router>
   );
