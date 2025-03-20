@@ -2,44 +2,6 @@ import { Request,Response } from "express";
 import User from "../model/User";
 
 
-export const getAllUsers=async(req:Request,res:Response)=>{
-    try {
-
-        const page =parseInt(req.query.page as string) || 1;
-        const limit =parseInt(req.query.limit as string) || 10;
-        const search =req.query.search as string || "";
-
-
-        const skip =(page -1) * limit;
-
-        const searchQuery = search
-        ? { email: { $regex: search, $options: 'i' } }
-        : {};
-      
-      
-      const totalUsers = await User.countDocuments(searchQuery);
-      const totalPages = Math.ceil(totalUsers / limit);
-      
-     
-      const users = await User.find(searchQuery)
-        .select('-password')
-        .sort({ createdAt: -1 })
-        .skip(skip)
-        .limit(limit);
-      
-      res.json({
-        users,
-        page,
-        limit,
-        totalPages,
-        totalUsers
-      });
-        
-    } catch (error) {
-        console.error('Error fetching users:', error);
-       res.status(500).json({ message: 'Server error' });
-    }
-}
 
 
 export const uploadKYC =async(req:Request & {user?:{id:string}},res:Response)=>{

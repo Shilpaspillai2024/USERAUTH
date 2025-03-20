@@ -2,7 +2,8 @@ import express from 'express'
 import cors from 'cors';
 import connectdb from './config/dbconnect';
 import dotenv from 'dotenv';
-import userRoutes from './routes/userRoutes'
+import userRoutes from './routes/userRoutes';
+import adminRoutes from './routes/adminRoutes';
 
 
 dotenv.config();
@@ -19,6 +20,8 @@ app.use(express.json());
 connectdb();
 
 app.use('/api/users',userRoutes);
+
+app.use('/api/admin',adminRoutes);
 
 
 app.get('/',(req,res)=>{

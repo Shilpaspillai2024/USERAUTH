@@ -116,7 +116,6 @@ function App() {
             <div className="navbar-brand">MERN Authentication</div>
             <div className="navbar-links">
               <Link to="/dashboard">Dashboard</Link>
-              <Link to="/kyc">KYC</Link>
               <button onClick={handleLogout} className="logout-button">
                 Logout
               </button>
