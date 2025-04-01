@@ -1,12 +1,10 @@
 import { Request,Response } from "express";
 import User from "../model/User";
 import jwt from 'jsonwebtoken'
+import {STATUS_CODE,MESSAGES} from "../constants/statuscode";
 
 
 export const adminLogin =async(req:Request,res:Response)=>{
-
-
-
     try {
 
         const{username,password}=req.body;
@@ -15,7 +13,7 @@ export const adminLogin =async(req:Request,res:Response)=>{
             username !==process.env.ADMIN_USERNAME ||
             password !==process.env.ADMIN_PASSWORD
         ){
-            return res.status(401).json({message:"Invalid admin credentials"})
+            return res.status(STATUS_CODE.UNAUTHORIZED).json({message:MESSAGES.INVALID_CREDENTIALS})
         }
 
 
@@ -27,15 +25,15 @@ export const adminLogin =async(req:Request,res:Response)=>{
             process.env.JWT_SECRET as string,
             {expiresIn:"1h"}
         )
-        res.status(200).json({
-            message:"admin login successfull",
+        res.status(STATUS_CODE.SUCCESS).json({
+            message:MESSAGES.ADMIN_LOGIN_SUCCESS,
             token
         })
 
         
     } catch (error) {
         console.error("Admin login error", error);
-        res.status(500).json({ message: "Server error" });
+        res.status(STATUS_CODE.SERVER_ERROR).json({ message:MESSAGES.SERVER_ERROR});
     }
 }
 
@@ -80,7 +78,7 @@ export const getUsers =async(req:Request &{admin?:boolean},res:Response)=>{
         
     } catch (error) {
         console.error('Error fetching users for admin:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(STATUS_CODE.SERVER_ERROR).json({ message:MESSAGES.SERVER_ERROR });
     }
 }
 
@@ -90,7 +88,7 @@ export const getUserKycDetails = async (req:Request & {admin?:boolean},res:Respo
     try {
         
       if(!req.admin){
-        return res.status(403).json({message:"Admin access required"})
+        return res.status(STATUS_CODE.FORBIDDEN).json({message:MESSAGES.ADMIN_ACCESS_DENIED})
       }
 
       const userId =req.params.userId
@@ -112,6 +110,6 @@ export const getUserKycDetails = async (req:Request & {admin?:boolean},res:Respo
 
     } catch (error) {
         console.error('Error fetching user KYC details:', error);
-        res.status(500).json({ message: 'Server error' });
+        res.status(STATUS_CODE.SERVER_ERROR).json({ message:MESSAGES.SERVER_ERROR});
     }
 }

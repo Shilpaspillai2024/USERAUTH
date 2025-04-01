@@ -2,18 +2,19 @@ import { Request, Response } from "express";
 import User from "../model/User";
 import { hashPassword,comparePassword } from "../utils/hashPassword";
 import jwt from 'jsonwebtoken'
+import { STATUS_CODE,MESSAGES } from "../constants/statuscode";
 
 export const registerUser = async (req:Request,res:Response) => {
   try {
     const { email, password } = req.body;
 
     if (!email || !password) {
-      return res.status(400).json({ message: "Please provide email and password" });
+      return res.status(STATUS_CODE.BAD_REQUEST).json({ message:MESSAGES.EMAIL_PASSWORD_REQUIRED });
     }
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "User already exists" });
+      return res.status(STATUS_CODE.BAD_REQUEST).json({ message:MESSAGES.USER_ALREADY_EXISTS});
     }
 
     const hashedPassword = await hashPassword(password);
@@ -24,10 +25,10 @@ export const registerUser = async (req:Request,res:Response) => {
     });
 
     await newUser.save();
-    res.status(201).json({ message: "User registered successfully" });
+    res.status(STATUS_CODE.CREATED).json({ message:MESSAGES.REGISTRATION_SUCCESS});
   } catch (error) {
     console.error("Registration error", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(STATUS_CODE.SERVER_ERROR).json({ message:MESSAGES.SERVER_ERROR});
   }
 };
 
@@ -37,17 +38,17 @@ export const loginUser=async(req:Request,res:Response)=>{
         const {email,password}=req.body;
 
         if(!email || !password){
-            return res.status(400).json({message:"Please provide email and password"})
+            return res.status(STATUS_CODE.BAD_REQUEST).json({message:MESSAGES.ADMIN_LOGIN_SUCCESS})
         }
 
         const user=await User.findOne({email});
         if(!user){
-            return res.status(401).json({message:'invalid credentails'})
+            return res.status(STATUS_CODE.UNAUTHORIZED).json({message:MESSAGES.INVALID_CREDENTIALS})
         }
 
         const isPassswordValid=await comparePassword(password,user.password)
         if(!isPassswordValid){
-            return res.status(401).json({message:'invalid credentails'})
+            return res.status(STATUS_CODE.UNAUTHORIZED).json({message:MESSAGES.INVALID_CREDENTIALS})
         }
 
         const payload={
@@ -61,14 +62,14 @@ export const loginUser=async(req:Request,res:Response)=>{
 
         )
 
-        res.status(200).json({
-            message:"Login successful",
+        res.status(STATUS_CODE.SUCCESS).json({
+            message:MESSAGES.LOGIN_SUCCESS,
             token,
         })
 
     } catch (error) {
         console.error("Login error", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(STATUS_CODE.SERVER_ERROR).json({ message:MESSAGES.SERVER_ERROR});
     }
 }
 
@@ -80,6 +81,6 @@ export const getUser=async(req:Request &{user?:{id:string}},res:Response)=>{
     
   } catch (error) {
     console.error('Get user error:', error);
-    res.status(500).json({ message: 'Server error' });
+    res.status(STATUS_CODE.SERVER_ERROR).json({ message:MESSAGES.SERVER_ERROR});
   }
 }

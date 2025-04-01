@@ -36,10 +36,7 @@ const UserSchema = new Schema<IUser>(
   },
   {
     timestamps: true,
-    // createdAt:{
-    //     type:Date,
-    //     default:Date.now
-    // }
+    
   }
 );
 

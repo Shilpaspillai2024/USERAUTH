@@ -1,5 +1,6 @@
 import { Request,Response } from "express";
 import User from "../model/User";
+import { STATUS_CODE,MESSAGES } from "../constants/statuscode";
 
 
 
@@ -8,7 +9,7 @@ export const uploadKYC =async(req:Request & {user?:{id:string}},res:Response)=>{
     try {
         
         if(!req.user){
-            return res.status(401).json({message:'Unauthorized'})
+            return res.status(STATUS_CODE.UNAUTHORIZED).json({message:MESSAGES.UNAUTHORIZED})
         }
 
         const userId=req.user.id;
@@ -18,13 +19,13 @@ export const uploadKYC =async(req:Request & {user?:{id:string}},res:Response)=>{
         console.log("kycType",kycType);
     
         if (!kycUrl || !kycPublicId || !kycType || (kycType !== "video" && kycType !== "image")) {
-          return res.status(400).json({ message: "Invalid KYC data" });
+          return res.status(STATUS_CODE.BAD_REQUEST).json({ message:MESSAGES.INVALID_KYC_DATA});
         }
         
         const user = await User.findById(userId);
         
         if (!user) {
-          return res.status(404).json({ message: 'User not found' });
+          return res.status(STATUS_CODE.NOT_FOUND).json({ message:MESSAGES.USER_NOT_FOUND});
         }
         
        
@@ -36,14 +37,14 @@ export const uploadKYC =async(req:Request & {user?:{id:string}},res:Response)=>{
         
         await user.save();
         
-        res.status(200).json({ 
-          message: 'KYC uploaded successfully',
+        res.status(STATUS_CODE.SUCCESS).json({ 
+          message:MESSAGES.KYC_UPLOADED_SUCCESS,
           kycType,
           kycDate: user.kycDate,
           kycUrl: user.kycUrl
         });
     } catch (error) {
         console.error('Error uploading KYC:', error);
-    res.status(500).json({ message: 'Server error' }); 
+       res.status(STATUS_CODE.SERVER_ERROR).json({ message:MESSAGES.SERVER_ERROR}); 
     }
 }
