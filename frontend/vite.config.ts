@@ -14,19 +14,16 @@ import react from '@vitejs/plugin-react-swc'
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3000, // Set the server to run on port 3000
+    port: 3000, 
   },
   build: {
-    outDir: 'dist', // Ensure it's set to 'dist' for Render deployment
+    outDir: 'dist', 
   },
   resolve: {
     alias: {
-      '@': '/src', // Optional alias setup
+      '@': '/src', 
     },
-  },
-  // Ensure React Router works with Render
-  esbuild: {
-    jsxInject: `import React from 'react'`,
-  },
+  }
 })
+
 
