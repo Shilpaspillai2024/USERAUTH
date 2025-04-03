@@ -5,6 +5,7 @@ import {
   Route,
   Navigate,
   Link,
+  useNavigate,
 } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Register from "./components/auth/Register";
@@ -22,6 +23,7 @@ interface KYCFiles {
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const navigate=useNavigate();
 
   const checkAuth = async () => {
     const token = localStorage.getItem("token");
@@ -62,7 +64,8 @@ function App() {
       if (result) {
         toast.success("KYC updated successfully")
         await checkAuth();
-        window.location.href = "/dashboard";
+      //  window.location.href = "/dashboard";
+      navigate('/dashboard')
         return true;
       }
       return false;
