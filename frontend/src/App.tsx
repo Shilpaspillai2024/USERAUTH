@@ -65,7 +65,7 @@ function App() {
         toast.success("KYC updated successfully")
         await checkAuth();
       //  window.location.href = "/dashboard";
-      navigate('/dashboard')
+      navigate('/dashboar')
         return true;
       }
       return false;
