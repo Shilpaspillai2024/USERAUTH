@@ -81,7 +81,7 @@ function App() {
   };
 
   return (
-    <Router>
+  //  <Router>
       <div className="App">
         {isAuthenticated && (
           <nav className="navbar">
@@ -144,7 +144,7 @@ function App() {
           pauseOnHover
         />
       </div>
-    </Router>
+  //  </Router>
   );
 }
 

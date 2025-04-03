@@ -31,7 +31,7 @@ function AdminApp() {
   };
 
   return (
-    <Router>
+ //   <Router>
       <div className="App">
         {isAdminAuthenticated && (
           <nav className="navbar">
@@ -80,7 +80,7 @@ function AdminApp() {
           />
         </Routes>
       </div>
-    </Router>
+  //  </Router>
   );
 }
 
