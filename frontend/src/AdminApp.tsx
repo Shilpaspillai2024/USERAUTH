@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -31,7 +30,7 @@ function AdminApp() {
   };
 
   return (
- //   <Router>
+ 
       <div className="App">
         {isAdminAuthenticated && (
           <nav className="navbar">
@@ -80,7 +79,6 @@ function AdminApp() {
           />
         </Routes>
       </div>
-  //  </Router>
   );
 }
 

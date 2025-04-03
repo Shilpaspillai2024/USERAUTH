@@ -1,6 +1,5 @@
 import React from "react";
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -64,8 +63,7 @@ function App() {
       if (result) {
         toast.success("KYC updated successfully")
         await checkAuth();
-      //  window.location.href = "/dashboard";
-      navigate('/dashboar')
+        navigate('/dashboard')
         return true;
       }
       return false;
@@ -81,7 +79,6 @@ function App() {
   };
 
   return (
-  //  <Router>
       <div className="App">
         {isAuthenticated && (
           <nav className="navbar">
@@ -144,7 +141,6 @@ function App() {
           pauseOnHover
         />
       </div>
-  //  </Router>
   );
 }
 
