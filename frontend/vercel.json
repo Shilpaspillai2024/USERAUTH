@@ -1,6 +1,5 @@
 {
     "routes": [
-      { "src": "/admin.*", "dist": "/index.html" },
       { "src": "/(.*)", "dist": "/index.html" }
     ]
   }
