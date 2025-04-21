@@ -1,5 +1,6 @@
 import { Request,Response,NextFunction } from "express";
 import jwt from 'jsonwebtoken';
+import BlacklistedToken from "../model/BlackListedToken";
 
 interface DecodedToken{
     user:{
@@ -14,7 +15,7 @@ interface AuthRequest extends Request{
     }
 }
 
-export default function auth(req:AuthRequest,res:Response,next:NextFunction){
+export default async function auth(req:AuthRequest,res:Response,next:NextFunction){
 
 const token=req.header('x-auth-token');
 if(!token){
@@ -22,6 +23,11 @@ if(!token){
 }
 
 try {
+
+    const blacklisted=await BlacklistedToken.findOne({token})
+    if(blacklisted){
+        return res.status(401).json({message:"Token has been blacklisted"})
+    }
 
 const decoded=jwt.verify(
     token,

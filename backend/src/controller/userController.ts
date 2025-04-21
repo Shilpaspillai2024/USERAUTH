@@ -5,7 +5,7 @@ import { STATUS_CODE,MESSAGES } from "../constants/statuscode";
 
 
 
-export const uploadKYC =async(req:Request & {user?:{id:string}},res:Response)=>{
+export const uploadKYC =async(req:Request & {user?:{id:string}},res:Response,next:Function)=>{
     try {
         
         if(!req.user){
@@ -44,7 +44,7 @@ export const uploadKYC =async(req:Request & {user?:{id:string}},res:Response)=>{
           kycUrl: user.kycUrl
         });
     } catch (error) {
-        console.error('Error uploading KYC:', error);
-       res.status(STATUS_CODE.SERVER_ERROR).json({ message:MESSAGES.SERVER_ERROR}); 
+      
+      next(error)
     }
 }

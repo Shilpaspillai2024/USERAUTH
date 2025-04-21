@@ -23,3 +23,9 @@ export const MESSAGES = {
     LOGIN_SUCCESS: "Login successful",
    
   };
+
+  export const KYC_STATUS={
+    VERIFIED:"Verified",
+    PENDING:"Pending",
+    NOT_PROVIDED:"Not provided"
+  }

@@ -1,10 +1,10 @@
 import { Request,Response } from "express";
 import User from "../model/User";
 import jwt from 'jsonwebtoken'
-import {STATUS_CODE,MESSAGES} from "../constants/statuscode";
+import {STATUS_CODE,MESSAGES,KYC_STATUS} from "../constants/statuscode";
 
 
-export const adminLogin =async(req:Request,res:Response)=>{
+export const adminLogin =async(req:Request,res:Response,next:Function)=>{
     try {
 
         const{username,password}=req.body;
@@ -32,13 +32,13 @@ export const adminLogin =async(req:Request,res:Response)=>{
 
         
     } catch (error) {
-        console.error("Admin login error", error);
-        res.status(STATUS_CODE.SERVER_ERROR).json({ message:MESSAGES.SERVER_ERROR});
+       
+        next(error)
     }
 }
 
 
-export const getUsers =async(req:Request &{admin?:boolean},res:Response)=>{
+export const getUsers =async(req:Request &{admin?:boolean},res:Response,next:Function)=>{
     try {
 
         if(!req.admin){
@@ -77,14 +77,14 @@ export const getUsers =async(req:Request &{admin?:boolean},res:Response)=>{
                })
         
     } catch (error) {
-        console.error('Error fetching users for admin:', error);
-        res.status(STATUS_CODE.SERVER_ERROR).json({ message:MESSAGES.SERVER_ERROR });
+        
+        next(error)
     }
 }
 
 
 
-export const getUserKycDetails = async (req:Request & {admin?:boolean},res:Response)=>{
+export const getUserKycDetails = async (req:Request & {admin?:boolean},res:Response,next:Function)=>{
     try {
         
       if(!req.admin){
@@ -101,15 +101,14 @@ export const getUserKycDetails = async (req:Request & {admin?:boolean},res:Respo
     res.json({
       userId: user._id,
       email: user.email,
-      kycStatus: user.kycVerified ? 'Verified' : 'Pending',
-      kycType: user.kycType || 'Not provided',
-      kycDate: user.kycDate || 'Not provided',
-      kycUrl: user.kycUrl || 'Not provided'
+      kycStatus: user.kycVerified ? KYC_STATUS.VERIFIED : KYC_STATUS.PENDING,
+      kycType: user.kycType || KYC_STATUS.NOT_PROVIDED,
+      kycDate: user.kycDate || KYC_STATUS.NOT_PROVIDED,
+      kycUrl: user.kycUrl || KYC_STATUS.NOT_PROVIDED
     });
 
 
     } catch (error) {
-        console.error('Error fetching user KYC details:', error);
-        res.status(STATUS_CODE.SERVER_ERROR).json({ message:MESSAGES.SERVER_ERROR});
+        next(error)
     }
 }
