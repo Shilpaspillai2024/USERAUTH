@@ -15,14 +15,20 @@ const app=express();
 
 
 
+
+const allowedOrigins = ['https://userauth-delta.vercel.app', 'http://localhost:3000'];
+
 app.use(cors({
-    origin: [
-      "https://userauth-delta.vercel.app", 
-      "http://localhost:3000" 
-    ],
-    credentials: true
-  }));
-  
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
 
 
 app.use(express.json());
