@@ -3,7 +3,7 @@ import User from "../model/User";
 import { hashPassword,comparePassword } from "../utils/hashPassword";
 import jwt from 'jsonwebtoken'
 import { STATUS_CODE,MESSAGES } from "../constants/statuscode";
-import BlacklistedToken from "../model/BlackListedToken";
+import BlacklistedToken from "../model/BlackListToken";
 
 export const registerUser = async (req:Request,res:Response,next:Function) => {
   try {
