@@ -1,4 +1,4 @@
- import mongoose from "mongoose";
+import mongoose from "mongoose";
 
  const BlacklistedTokenSchema=new mongoose.Schema({
     token:{

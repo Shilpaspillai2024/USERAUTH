@@ -1,6 +1,6 @@
 import { Request,Response,NextFunction } from "express";
 import jwt from 'jsonwebtoken';
-import BlacklistedToken from "../model/BlackListedToken";
+import BlacklistedToken from "../model/BlackListedToken"
 
 interface DecodedToken{
     user:{
